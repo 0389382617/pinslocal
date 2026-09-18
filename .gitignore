@@ -2,3 +2,14 @@ node_modules/
 dist/
 .env
 *.log
+
+# Terraform - state/vars co the chua thong tin nhay cam (token, IP...)
+infra/terraform/.terraform/
+infra/terraform/terraform.tfstate
+infra/terraform/terraform.tfstate.backup
+infra/terraform/terraform.tfvars
+infra/terraform/*.tfplan
+
+# Ansible - inventory that (chua IP that) va mat khau sinh ra
+infra/ansible/inventory.ini
+infra/ansible/.generated_minio_password

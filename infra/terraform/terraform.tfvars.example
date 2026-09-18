@@ -1,0 +1,3 @@
+# Copy file nay thanh "terraform.tfvars" (bo ".example") va dien token that vao.
+# terraform.tfvars KHONG duoc commit len git (da khai bao trong .gitignore).
+do_token = "dan-api-token-digitalocean-vao-day"

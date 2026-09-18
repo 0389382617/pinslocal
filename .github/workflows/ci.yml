@@ -51,3 +51,7 @@ jobs:
           context: frontend
           push: true
           tags: ghcr.io/${{ github.repository }}/frontend:latest
+          # /api va /photos: frontend goi qua Nginx reverse proxy tren VPS (xem infra/docker-compose.prod.yml),
+          # khong dung URL tuyet doi vi domain/IP VPS co the doi.
+          build-args: |
+            VITE_API_URL=/api

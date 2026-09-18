@@ -1,0 +1,4 @@
+# Copy thanh "inventory.ini" (bo ".example"), thay <IP_DROPLET> bang gia tri
+# output "droplet_ip" sau khi chay terraform apply.
+[pinslocal]
+<IP_DROPLET> ansible_user=root ansible_ssh_private_key_file=~/.ssh/pinslocal_deploy

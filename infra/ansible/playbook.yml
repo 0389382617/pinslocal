@@ -1,0 +1,65 @@
+---
+- name: Trien khai PinsLocal len VPS
+  hosts: pinslocal
+  become: true
+
+  vars:
+    app_dir: /opt/pinslocal
+
+  tasks:
+    - name: Cap nhat apt cache
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Cai dat Docker (script chinh thuc get.docker.com, da kem docker compose plugin)
+      ansible.builtin.shell: |
+        curl -fsSL https://get.docker.com | sh
+      args:
+        creates: /usr/bin/docker
+
+    - name: Dam bao Docker dang chay va tu khoi dong cung VPS
+      ansible.builtin.systemd:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Tao thu muc ung dung
+      ansible.builtin.file:
+        path: "{{ app_dir }}/nginx-proxy"
+        state: directory
+        mode: "0755"
+
+    - name: Sinh mat khau MinIO ngau nhien (luu lai, tai su dung cho lan chay sau - khong doi moi lan)
+      ansible.builtin.set_fact:
+        minio_password: "{{ lookup('password', playbook_dir + '/.generated_minio_password length=24 chars=ascii_letters,digits') }}"
+
+    - name: Tao file .env tren VPS (chua mat khau MinIO)
+      ansible.builtin.copy:
+        dest: "{{ app_dir }}/.env"
+        mode: "0600"
+        content: |
+          MINIO_ROOT_USER=pinslocal
+          MINIO_ROOT_PASSWORD={{ minio_password }}
+
+    - name: Copy docker-compose.prod.yml len VPS
+      ansible.builtin.copy:
+        src: ../docker-compose.prod.yml
+        dest: "{{ app_dir }}/docker-compose.yml"
+        mode: "0644"
+
+    - name: Copy cau hinh Nginx reverse proxy
+      ansible.builtin.copy:
+        src: ../nginx-proxy/nginx.conf
+        dest: "{{ app_dir }}/nginx-proxy/nginx.conf"
+        mode: "0644"
+
+    - name: Keo image moi nhat tu ghcr.io
+      ansible.builtin.shell: docker compose pull
+      args:
+        chdir: "{{ app_dir }}"
+
+    - name: Khoi dong ung dung
+      ansible.builtin.shell: docker compose up -d
+      args:
+        chdir: "{{ app_dir }}"
