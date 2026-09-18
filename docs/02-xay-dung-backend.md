@@ -68,6 +68,49 @@ Kết quả: **5/5 test pass** (GET /pins rỗng, GET /pins có dữ liệu, POS
 
 Script này tạo bảng DynamoDB "Pins" và bucket S3 "pinslocal-photos" (kèm policy public-read để ảnh xem được trực tiếp từ trình duyệt) nếu chưa tồn tại. Có cơ chế **retry** (thử lại 10 lần, cách nhau 2 giây) vì khi `docker compose up` khởi động, DynamoDB-local/MinIO có thể chưa kịp sẵn sàng ngay — đây là pattern rất phổ biến khi deploy thật (service phụ thuộc chưa "warm up" xong).
 
+## 2.8. "Kết nối" thực chất là gì — và cách tự mắt nhìn thấy nó
+
+### Cơ chế kết nối (không cần đoán, đây là cách hoạt động thật)
+
+Khi chạy `docker compose up`, Docker tự tạo ra **1 mạng nội bộ riêng** cho toàn bộ service trong file (mạng tên `infra_default`) và tự đăng ký "tên service" thành "tên máy" trong mạng đó. Đó là lý do trong `infra/docker-compose.yml`, biến `DYNAMODB_ENDPOINT: http://dynamodb-local:8000` dùng được — chữ `dynamodb-local` ở đây **không phải tên miền internet**, mà là tên container mà Docker tự dịch ra địa chỉ IP nội bộ. Backend và DynamoDB "kết nối" với nhau đơn giản là: backend gửi HTTP request tới `http://dynamodb-local:8000`, Docker route request đó tới đúng container.
+
+Xem bằng mắt (không bắt buộc, chỉ để hiểu):
+
+```
+docker network inspect infra_default
+```
+
+Kéo xuống mục `"Containers"` — sẽ thấy `backend`, `dynamodb-local`, `minio`... mỗi cái có 1 IP nội bộ riêng, đều nằm chung 1 mạng.
+
+### Cách 1 — Xem dữ liệu DynamoDB bằng giao diện web (không cần gõ lệnh)
+
+Đã thêm sẵn 1 service `dynamodb-admin` vào `infra/docker-compose.yml` — giao diện web để duyệt bảng/dữ liệu DynamoDB-local bằng mắt.
+
+1. Chạy (nếu stack chưa có service này, chạy lại 1 lần):
+   ```
+   cd infra
+   docker compose up -d
+   ```
+2. Mở trình duyệt: **http://localhost:8001**
+3. Trang chủ hiện danh sách bảng — sẽ thấy 1 dòng tên **`Pins`**.
+4. Bấm vào chữ **`Pins`** → chuyển sang trang hiển thị toàn bộ item (bản ghi) đang có trong bảng, dạng bảng biểu.
+5. Mỗi dòng là 1 pin bạn đã tạo qua app — bấm vào 1 dòng để xem chi tiết từng thuộc tính (`id`, `title`, `lat`, `lng`, `photoKey`, `photoUrl`, `createdAt`) dạng JSON.
+6. Có thể bấm nút **Create item** để tự tay thêm 1 bản ghi thẳng vào DynamoDB (không qua app) — thử refresh lại trang http://localhost:3000 sẽ thấy pin đó cũng xuất hiện trên bản đồ, chứng minh app đang đọc đúng từ đây.
+
+> Công cụ này (`aaronshaf/dynamodb-admin`) chỉ thêm cho môi trường **phát triển local** — không đưa vào `docker-compose.prod.yml` vì không có đăng nhập/bảo mật, không nên mở công khai trên internet.
+
+### Cách 2 — Xem ảnh đã upload bằng giao diện MinIO (giả lập S3)
+
+1. Mở trình duyệt: **http://localhost:9001**
+2. Đăng nhập: ô **Username** gõ `minioadmin`, ô **Password** gõ `minioadmin` (cấu hình trong `docker-compose.yml`, chỉ dùng cho local) → bấm **Login**.
+3. Màn hình chính (**Object Browser**) hiện danh sách bucket → bấm vào **`pinslocal-photos`**.
+4. Thấy danh sách file ảnh đã upload (tên dạng `<uuid>-<tên-file-goc>`) → bấm vào 1 file → panel bên phải hiện nút **Preview** (xem trước ảnh) và **Download**.
+5. Vào tab **Access Policy** (trong màn hình chi tiết bucket, cạnh "Summary") để thấy chính sách **public-read** mà `backend/src/scripts/setup.js` đã tự động thiết lập lúc khởi động — đây là lý do ảnh xem được trực tiếp qua URL mà không cần đăng nhập.
+
+### Cách 3 — Xem trực tiếp qua trình duyệt bằng URL ảnh
+
+Mỗi pin có ảnh trả về trong JSON 1 trường `photoUrl` dạng `http://localhost:9000/pinslocal-photos/<ten-file>` — dán thẳng URL đó vào tab trình duyệt mới cũng xem được ảnh (vì bucket đã public-read), không cần qua giao diện MinIO.
+
 ## Tiếp theo
 
 Qua [03-xay-dung-frontend.md](03-xay-dung-frontend.md).

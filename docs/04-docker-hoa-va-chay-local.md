@@ -4,15 +4,18 @@ Thư mục: [`infra/`](../infra/).
 
 ## 4.1. Đọc hiểu `docker-compose.yml`
 
-Mở [`infra/docker-compose.yml`](../infra/docker-compose.yml). 5 service:
+Mở [`infra/docker-compose.yml`](../infra/docker-compose.yml). 6 service:
 
 | Service | Image | Vai trò |
 |---|---|---|
 | `dynamodb-local` | `amazon/dynamodb-local` | Giả lập DynamoDB, chạy chế độ `-inMemory` (mất dữ liệu khi restart — chấp nhận được vì đây là môi trường học/dev) |
 | `minio` | `quay.io/minio/minio` | Giả lập S3, có UI quản lý ở port 9001 |
+| `dynamodb-admin` | `aaronshaf/dynamodb-admin` | Giao diện web xem dữ liệu DynamoDB bằng mắt, port 8001 (chỉ dev, không dùng ở production) |
 | `init` | build từ `backend/` | Chạy 1 lần (`src/scripts/setup.js`) để tạo bảng + bucket, rồi tự thoát |
 | `backend` | build từ `backend/` | API, chỉ khởi động **sau khi** `init` chạy xong thành công (`condition: service_completed_successfully`) |
 | `frontend` | build từ `frontend/` | Giao diện web, build với `VITE_API_URL=http://localhost:4000` |
+
+Cách bấm-từng-bước để xem dữ liệu DynamoDB/S3 bằng giao diện web (đăng nhập MinIO, duyệt bucket, duyệt bảng DynamoDB...): xem [docs/02 mục 2.8](02-xay-dung-backend.md#28-kết-nối-thực-chất-là-gì--và-cách-tự-mắt-nhìn-thấy-nó).
 
 `environment: &backend-env ... <<: *backend-env` là **YAML anchor** — khai báo 1 lần bộ biến môi trường dùng chung cho `init` và `backend`, tránh lặp code.
 

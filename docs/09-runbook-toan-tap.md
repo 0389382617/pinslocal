@@ -125,6 +125,13 @@ curl http://localhost:4000/health
 curl http://localhost:4000/pins
 ```
 
+**Muốn tự mắt xem dữ liệu vừa tạo nằm ở đâu, kết nối ra sao** (không chỉ tin vào code) — 2 giao diện web đã dựng sẵn:
+
+- **DynamoDB** (bảng `Pins`): mở http://localhost:8001 → bấm vào chữ **Pins** → thấy toàn bộ bản ghi dạng bảng, bấm 1 dòng để xem chi tiết JSON.
+- **Ảnh (S3/MinIO)**: mở http://localhost:9001 → đăng nhập `minioadmin` / `minioadmin` → bấm bucket **pinslocal-photos** → thấy từng file ảnh, bấm vào để **Preview**.
+
+Hướng dẫn đầy đủ từng cú click + giải thích cơ chế kết nối (vì sao gõ `dynamodb-local`/`minio` mà backend nối được): [docs/02 mục 2.8](02-xay-dung-backend.md#28-kết-nối-thực-chất-là-gì--và-cách-tự-mắt-nhìn-thấy-nó).
+
 ### 3.3. Chạy bộ test tự động
 
 ```
