@@ -1,12 +1,16 @@
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaflet";
 import L from "leaflet";
+import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
+import markerIcon from "leaflet/dist/images/marker-icon.png";
+import markerShadow from "leaflet/dist/images/marker-shadow.png";
 
 // Fix icon mac dinh cua Leaflet khi bundler khong tu tim thay anh marker.
+// Dung anh da duoc Vite dong goi san (khong phu thuoc CDN unpkg.com luc runtime).
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
-  iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
-  shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+  iconRetinaUrl: markerIcon2x,
+  iconUrl: markerIcon,
+  shadowUrl: markerShadow,
 });
 
 const HANOI_CENTER = [21.0285, 105.8542];
@@ -20,7 +24,7 @@ function ClickHandler({ onMapClick }) {
   return null;
 }
 
-export default function PinMap({ pins, onMapClick, pendingLatLng, onDelete }) {
+export default function PinMap({ pins, onMapClick, pendingLatLng, onDelete, deletingId }) {
   return (
     <MapContainer center={HANOI_CENTER} zoom={13} style={{ height: "70vh", width: "100%" }}>
       <TileLayer
@@ -44,7 +48,9 @@ export default function PinMap({ pins, onMapClick, pendingLatLng, onDelete }) {
               <img src={pin.photoUrl} alt={pin.title} style={{ maxWidth: 200 }} />
             )}
             <br />
-            <button onClick={() => onDelete(pin.id)}>Xoa</button>
+            <button onClick={() => onDelete(pin.id)} disabled={deletingId === pin.id}>
+              {deletingId === pin.id ? "Dang xoa..." : "Xoa"}
+            </button>
           </Popup>
         </Marker>
       ))}

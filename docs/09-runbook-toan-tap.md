@@ -101,7 +101,7 @@ docker compose up --build -d
 docker compose ps
 ```
 
-Phải thấy 4 dòng `dynamodb-local`, `minio`, `backend`, `frontend` đều ở trạng thái **Up** (container `init` sẽ hiện "Exited (0)" — đây là **bình thường**, nó chỉ chạy 1 lần để tạo bảng/bucket rồi tự tắt).
+Phải thấy 5 dòng `dynamodb-local`, `minio`, `dynamodb-admin`, `backend`, `frontend` đều ở trạng thái **Up** (container `init` sẽ hiện "Exited (0)" — đây là **bình thường**, nó chỉ chạy 1 lần để tạo bảng/bucket rồi tự tắt).
 
 ### 3.1. Hai lỗi thật đã gặp lúc dựng (đã sửa sẵn trong code, biết trước để tự nhận ra nếu gặp lại)
 

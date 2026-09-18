@@ -54,12 +54,8 @@
         dest: "{{ app_dir }}/nginx-proxy/nginx.conf"
         mode: "0644"
 
-    - name: Keo image moi nhat tu ghcr.io
-      ansible.builtin.shell: docker compose pull
-      args:
-        chdir: "{{ app_dir }}"
-
-    - name: Khoi dong ung dung
-      ansible.builtin.shell: docker compose up -d
-      args:
-        chdir: "{{ app_dir }}"
+    - name: Keo image moi nhat va khoi dong ung dung (idempotent - chi bao "changed" khi thuc su co thay doi)
+      community.docker.docker_compose_v2:
+        project_src: "{{ app_dir }}"
+        pull: always
+        state: present

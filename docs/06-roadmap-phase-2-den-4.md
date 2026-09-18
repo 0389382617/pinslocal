@@ -2,7 +2,9 @@
 
 Phase 1 (MVP) đã xong và chạy được local. Các phase dưới đây **chưa code** (vì cần tài khoản/tài nguyên thật bạn chưa có) — đây là bản kế hoạch chi tiết để làm dần, quay lại nhờ hướng dẫn tiếp khi bạn có từng tài nguyên.
 
-## Phase 2 — Lên VPS thật (cần: 1 VPS + 1 domain)
+## Phase 2 — Có link online
+
+**Đã hoàn thành theo hướng miễn phí**: xem [Bài 07](07-phase2-mien-phi-cloudflare-tunnel.md) — dùng Cloudflare Tunnel đưa app chạy local ra internet, không cần VPS/domain/thẻ thanh toán. Phần dưới đây mô tả hướng thay thế **có phí** (VPS thật, link cố định 24/7) nếu muốn nâng cấp sau — chi tiết từng bước đã viết ở [Bài 08](08-phase2-vps-tra-phi-terraform.md).
 
 **Chuẩn bị**: mua 1 VPS (DigitalOcean/Contabo/Vultr..., cấu hình tối thiểu 1-2 vCPU/2GB RAM đủ chạy Docker) + 1 domain (Namecheap/GoDaddy/123host...).
 

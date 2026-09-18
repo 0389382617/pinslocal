@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const multer = require("multer");
 const client = require("prom-client");
 const pinsRouter = require("./routes/pins");
 
@@ -23,7 +24,10 @@ const httpRequestDuration = new client.Histogram({
 app.use((req, res, next) => {
   const end = httpRequestDuration.startTimer();
   res.on("finish", () => {
-    end({ method: req.method, route: req.path, status: res.statusCode });
+    // Dung route pattern (vd "/pins/:id") thay vi req.path thuc te (chua id cu the)
+    // de tranh bung no so luong time-series theo tung id khac nhau.
+    const route = req.route ? `${req.baseUrl}${req.route.path}` : "unmatched";
+    end({ method: req.method, route, status: res.statusCode });
   });
   next();
 });
@@ -34,10 +38,22 @@ app.get("/metrics", async (req, res) => {
 
 app.use("/pins", pinsRouter);
 
-// error handler
+// error handler - phan biet loi do client (tra ve 400/413 kem message an toan)
+// voi loi server that su (tra ve 500 chung chung, khong lo message noi bo).
 app.use((err, req, res, next) => {
   console.error(err);
-  res.status(500).json({ error: err.message || "Internal error" });
+
+  if (err instanceof multer.MulterError) {
+    const message =
+      err.code === "LIMIT_FILE_SIZE" ? "Anh vuot qua 5MB" : "Upload anh khong hop le";
+    return res.status(413).json({ error: message });
+  }
+
+  if (err.statusCode === 400) {
+    return res.status(400).json({ error: err.message });
+  }
+
+  res.status(500).json({ error: "Da co loi xay ra, vui long thu lai sau" });
 });
 
 if (require.main === module) {

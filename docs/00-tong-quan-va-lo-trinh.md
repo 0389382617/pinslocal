@@ -18,7 +18,7 @@ Vì bạn hiện **chưa có tài khoản AWS/VPS/domain** (chỉ có GitHub), c
 | Phase | Cần có | Nội dung | Ánh xạ với slide đã học |
 |---|---|---|---|
 | **1 — MVP (đang làm)** | Chỉ cần máy tính + Docker | Xây app PinsLocal chạy 100% local bằng Docker: backend Node.js, frontend React, DynamoDB-local, MinIO (giả lập S3), CI cơ bản với GitHub Actions | Linux, Docker, CRUD DynamoDB/S3, CI/CD |
-| **2 — Lên VPS thật** | Tài khoản VPS (DigitalOcean...) + domain | Terraform tạo VPS, Ansible cài đặt & deploy tự động, gắn domain + SSL, CI mở rộng thành CD tự động deploy | Terraform, Ansible, Jenkins/CI-CD |
+| **2 — Có link online** | Không cần gì thêm (miễn phí, [Bài 07](07-phase2-mien-phi-cloudflare-tunnel.md)) **hoặc** Tài khoản VPS + domain (có phí, [Bài 08](08-phase2-vps-tra-phi-terraform.md)) | (a) Đã làm: dùng Cloudflare Tunnel đưa app local ra internet miễn phí; (b) Tùy chọn: Terraform tạo VPS, Ansible deploy tự động, gắn domain + SSL cho link cố định 24/7 | Terraform, Ansible, Jenkins/CI-CD |
 | **3 — Chuyển sang AWS thật** | Tài khoản AWS | Đổi DynamoDB-local/MinIO sang DynamoDB/S3 thật, thêm CloudFront, viết Lambda tối ưu ảnh, có thể chuyển sang EC2 | Cloud AWS (IAM, EC2, S3, CloudFront, Lambda, DynamoDB) |
 | **4 — Mở rộng vận hành** | Nhiều VPS/EC2 | Nhiều backend chạy sau Nginx Load Balancer, chuyển sang Kubernetes (Deployment/HPA/rolling update), thêm Mailcow gửi mail, Prometheus AlertManager cảnh báo | Load Balancer, K8s, Mailcow, Grafana/Prometheus |
 

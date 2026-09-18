@@ -42,7 +42,15 @@ cp terraform.tfvars.example terraform.tfvars
 
 Mở `terraform.tfvars` vừa tạo, thay dòng `do_token = "..."` bằng token thật.
 
-## Bước 3 — Xem trước những gì sẽ được tạo (chưa tốn phí)
+## Bước 3 — Khởi tạo Terraform (tải provider DigitalOcean, chỉ 1 lần)
+
+```
+docker run --rm -v "$(pwd):/workspace" -w /workspace hashicorp/terraform:latest init
+```
+
+Bắt buộc chạy lệnh này **trước** `plan`/`apply` — nếu bỏ qua, `plan` sẽ báo lỗi thiếu provider (nhất là khi vừa `git clone` lại trên máy khác, vì thư mục `.terraform/` không được commit lên Git).
+
+## Bước 4 — Xem trước những gì sẽ được tạo (chưa tốn phí)
 
 ```
 docker run --rm -v "$(pwd):/workspace" -w /workspace hashicorp/terraform:latest plan
@@ -50,7 +58,7 @@ docker run --rm -v "$(pwd):/workspace" -w /workspace hashicorp/terraform:latest 
 
 Lệnh này chỉ **mô phỏng**, chưa tạo gì thật, chưa tốn tiền — đọc kỹ output để hiểu Terraform sắp tạo: 1 SSH key + 1 Droplet (VPS) cấu hình `s-1vcpu-1gb` tại Singapore.
 
-## Bước 4 — Tạo VPS thật (bắt đầu tốn phí — droplet 1CPU/1GB ~ $6/tháng, tính theo giờ)
+## Bước 5 — Tạo VPS thật (bắt đầu tốn phí — droplet 1CPU/1GB ~ $6/tháng, tính theo giờ)
 
 ```
 docker run --rm -v "$(pwd):/workspace" -w /workspace hashicorp/terraform:latest apply
@@ -58,35 +66,37 @@ docker run --rm -v "$(pwd):/workspace" -w /workspace hashicorp/terraform:latest 
 
 Gõ `yes` khi được hỏi xác nhận. Sau khi chạy xong, Terraform in ra `droplet_ip = "..."` — đây là địa chỉ IP VPS của bạn.
 
-## Bước 5 — Cấu hình Ansible trỏ vào VPS
+## Bước 6 — Cấu hình Ansible trỏ vào VPS
 
 ```
 cd ../ansible
 cp inventory.ini.example inventory.ini
 ```
 
-Sửa `inventory.ini`, thay `<IP_DROPLET>` bằng IP thật vừa có ở Bước 4.
+Sửa `inventory.ini`, thay `<IP_DROPLET>` bằng IP thật vừa có ở Bước 5.
 
-## Bước 6 — Chạy Ansible để cài Docker + deploy app
+## Bước 7 — Chạy Ansible để cài Docker + deploy app
 
 ```
 docker run --rm -v "$(pwd):/workspace" -w /workspace alpine:3.20 sh -c \
-  "apk add --no-cache ansible openssh-client && ansible-playbook playbook.yml"
+  "apk add --no-cache ansible openssh-client && ansible-galaxy collection install -r requirements.yml && ansible-playbook playbook.yml"
 ```
 
-Playbook sẽ: cài Docker trên VPS, tạo `/opt/pinslocal`, sinh mật khẩu MinIO ngẫu nhiên, copy `docker-compose.prod.yml` + cấu hình Nginx, `docker compose pull` (kéo image đã build sẵn ở Bài 5 từ ghcr.io) rồi `docker compose up -d`.
+(`ansible-galaxy collection install -r requirements.yml` cài `community.docker` — module dùng để chạy `docker compose` trên VPS một cách idempotent, chỉ cần chạy lại khi image container ansible bị xóa/tạo mới.)
 
-## Bước 7 — Kiểm tra
+Playbook sẽ: cài Docker trên VPS, tạo `/opt/pinslocal`, sinh mật khẩu MinIO ngẫu nhiên, copy `docker-compose.prod.yml` + cấu hình Nginx, kéo image đã build sẵn ở Bài 5 từ ghcr.io rồi khởi động.
+
+## Bước 8 — Kiểm tra
 
 Mở trình duyệt: `http://<IP_DROPLET>` — phải thấy đúng giao diện PinsLocal, thêm được pin kèm ảnh y hệt lúc chạy local ở Phase 1.
 
-## Bước 8 — Domain + SSL (làm khi có domain)
+## Bước 9 — Domain + SSL (làm khi có domain)
 
 1. Mua domain, vào DNS setting, tạo bản ghi **A** trỏ `@` (hoặc subdomain) về `<IP_DROPLET>`.
 2. Cách đơn giản nhất: cài thêm **Nginx Proxy Manager** hoặc dùng `certbot` xin chứng chỉ Let's Encrypt cho domain, đặt nó đứng trước service `proxy` hiện tại (hoặc thay thế `proxy` bằng Nginx Proxy Manager, trỏ vào backend/frontend/minio y như file `nginx-proxy/nginx.conf` đang làm).
 3. Sau khi có domain + SSL, đây chính là **"link online"** cần nộp theo yêu cầu khóa học.
 
-## Bước 9 — Biến CI thành CD (tự động deploy khi push code)
+## Bước 10 — Biến CI thành CD (tự động deploy khi push code)
 
 Thêm job vào `.github/workflows/ci.yml`, dùng action `appleboy/ssh-action`, SSH vào VPS chạy `docker compose pull && docker compose up -d` mỗi khi có image mới — cần thêm 2 secret vào GitHub repo (Settings → Secrets → Actions): `VPS_HOST` (IP) và `VPS_SSH_KEY` (nội dung file private key `~/.ssh/pinslocal_deploy`). Sẽ hướng dẫn chi tiết khi bạn tới bước này.
 

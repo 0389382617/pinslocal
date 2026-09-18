@@ -7,6 +7,8 @@ export default function App() {
   const [pins, setPins] = useState([]);
   const [pendingLatLng, setPendingLatLng] = useState(null);
   const [error, setError] = useState(null);
+  const [creating, setCreating] = useState(false);
+  const [deletingId, setDeletingId] = useState(null);
 
   async function refresh() {
     try {
@@ -22,21 +24,31 @@ export default function App() {
   }, []);
 
   async function handleCreate(values) {
+    setCreating(true);
     try {
       await createPin(values);
       setPendingLatLng(null);
+      setError(null);
       await refresh();
     } catch (err) {
       setError(err.message);
+      throw err; // de PinForm biet tao pin that bai va giu nguyen du lieu da nhap
+    } finally {
+      setCreating(false);
     }
   }
 
   async function handleDelete(id) {
+    if (deletingId) return; // tranh bam xoa nhieu lan chong cheo
+    setDeletingId(id);
     try {
       await deletePin(id);
+      setError(null);
       await refresh();
     } catch (err) {
       setError(err.message);
+    } finally {
+      setDeletingId(null);
     }
   }
 
@@ -50,6 +62,7 @@ export default function App() {
           pendingLatLng={pendingLatLng}
           onMapClick={setPendingLatLng}
           onDelete={handleDelete}
+          deletingId={deletingId}
         />
       </div>
       <div style={{ flex: 1, padding: "1rem", borderLeft: "1px solid #ddd" }}>
@@ -58,6 +71,7 @@ export default function App() {
           latLng={pendingLatLng}
           onSubmit={handleCreate}
           onCancel={() => setPendingLatLng(null)}
+          submitting={creating}
         />
       </div>
     </div>

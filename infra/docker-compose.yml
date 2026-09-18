@@ -5,7 +5,7 @@ services:
     # (tranh loi quyen ghi file SQLite khi mount volume tren Docker Desktop/Windows).
     command: ["-jar", "DynamoDBLocal.jar", "-inMemory", "-sharedDb"]
     ports:
-      - "8000:8000"
+      - "127.0.0.1:8000:8000"
 
   minio:
     image: quay.io/minio/minio:latest
@@ -14,8 +14,8 @@ services:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
     ports:
-      - "9000:9000"
-      - "9001:9001"
+      - "127.0.0.1:9000:9000"
+      - "127.0.0.1:9001:9001"
     volumes:
       - minio-data:/data
 
@@ -29,7 +29,7 @@ services:
       AWS_ACCESS_KEY_ID: local
       AWS_SECRET_ACCESS_KEY: local
     ports:
-      - "8001:8001"
+      - "127.0.0.1:8001:8001"
     depends_on:
       - dynamodb-local
 
@@ -58,7 +58,7 @@ services:
       <<: *backend-env
       PORT: "4000"
     ports:
-      - "4000:4000"
+      - "127.0.0.1:4000:4000"
     depends_on:
       init:
         condition: service_completed_successfully
