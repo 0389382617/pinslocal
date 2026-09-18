@@ -26,7 +26,7 @@ function ClickHandler({ onMapClick }) {
 
 export default function PinMap({ pins, onMapClick, pendingLatLng, onDelete, deletingId }) {
   return (
-    <MapContainer center={HANOI_CENTER} zoom={13} style={{ height: "70vh", width: "100%" }}>
+    <MapContainer center={HANOI_CENTER} zoom={13}>
       <TileLayer
         attribution='&copy; OpenStreetMap contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -35,22 +35,27 @@ export default function PinMap({ pins, onMapClick, pendingLatLng, onDelete, dele
 
       {pendingLatLng && (
         <Marker position={[pendingLatLng.lat, pendingLatLng.lng]}>
-          <Popup>Vi tri pin moi (dien form ben canh)</Popup>
+          <Popup>Vị trí pin mới (điền form bên cạnh)</Popup>
         </Marker>
       )}
 
       {pins.map((pin) => (
         <Marker key={pin.id} position={[pin.lat, pin.lng]}>
           <Popup>
-            <strong>{pin.title}</strong>
-            <p>{pin.description}</p>
-            {pin.photoUrl && (
-              <img src={pin.photoUrl} alt={pin.title} style={{ maxWidth: 200 }} />
-            )}
-            <br />
-            <button onClick={() => onDelete(pin.id)} disabled={deletingId === pin.id}>
-              {deletingId === pin.id ? "Dang xoa..." : "Xoa"}
-            </button>
+            <div className="pin-popup">
+              <strong className="pin-popup__title">{pin.title}</strong>
+              {pin.description && <p className="pin-popup__desc">{pin.description}</p>}
+              {pin.photoUrl && (
+                <img className="pin-popup__img" src={pin.photoUrl} alt={pin.title} />
+              )}
+              <button
+                className="btn btn-danger"
+                onClick={() => onDelete(pin.id)}
+                disabled={deletingId === pin.id}
+              >
+                {deletingId === pin.id ? "Đang xóa..." : "Xóa"}
+              </button>
+            </div>
           </Popup>
         </Marker>
       ))}

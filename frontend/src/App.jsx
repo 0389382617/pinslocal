@@ -53,26 +53,38 @@ export default function App() {
   }
 
   return (
-    <div style={{ display: "flex", height: "100vh", fontFamily: "sans-serif" }}>
-      <div style={{ flex: 3 }}>
-        <h1 style={{ padding: "0 1rem" }}>PinsLocal</h1>
-        {error && <p style={{ color: "red", padding: "0 1rem" }}>{error}</p>}
-        <PinMap
-          pins={pins}
-          pendingLatLng={pendingLatLng}
-          onMapClick={setPendingLatLng}
-          onDelete={handleDelete}
-          deletingId={deletingId}
-        />
-      </div>
-      <div style={{ flex: 1, padding: "1rem", borderLeft: "1px solid #ddd" }}>
-        <h2>Them pin moi</h2>
-        <PinForm
-          latLng={pendingLatLng}
-          onSubmit={handleCreate}
-          onCancel={() => setPendingLatLng(null)}
-          submitting={creating}
-        />
+    <div className="app">
+      <header className="app-header">
+        <span className="app-header__logo" aria-hidden="true">📍</span>
+        <div>
+          <h1 className="app-header__title">PinsLocal</h1>
+          <p className="app-header__subtitle">Ghim địa điểm yêu thích kèm ảnh</p>
+        </div>
+      </header>
+
+      {error && <p className="error-banner">{error}</p>}
+
+      <div className="app-body">
+        <div className="map-panel">
+          <PinMap
+            pins={pins}
+            pendingLatLng={pendingLatLng}
+            onMapClick={setPendingLatLng}
+            onDelete={handleDelete}
+            deletingId={deletingId}
+          />
+        </div>
+        <div className="sidebar-panel">
+          <div className="sidebar-card">
+            <h2>Thêm pin mới</h2>
+            <PinForm
+              latLng={pendingLatLng}
+              onSubmit={handleCreate}
+              onCancel={() => setPendingLatLng(null)}
+              submitting={creating}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

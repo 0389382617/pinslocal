@@ -6,7 +6,7 @@ export default function PinForm({ latLng, onSubmit, onCancel, submitting }) {
   const [photo, setPhoto] = useState(null);
 
   if (!latLng) {
-    return <p>Nhap chuot vao ban do de chon vi tri ghim pin moi.</p>;
+    return <p className="empty-hint">Nhấp chuột vào bản đồ để chọn vị trí ghim pin mới.</p>;
   }
 
   async function handleSubmit(e) {
@@ -24,42 +24,51 @@ export default function PinForm({ latLng, onSubmit, onCancel, submitting }) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <p>
-        Vi tri: {latLng.lat.toFixed(5)}, {latLng.lng.toFixed(5)}
+    <form className="pin-form" onSubmit={handleSubmit}>
+      <p className="pin-form__location">
+        📍 Vị trí: {latLng.lat.toFixed(5)}, {latLng.lng.toFixed(5)}
       </p>
-      <div>
-        <label>Ten dia diem</label>
+
+      <div className="field">
+        <label htmlFor="pin-title">Tên địa điểm</label>
         <input
+          id="pin-title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
           disabled={submitting}
         />
       </div>
-      <div>
-        <label>Mo ta</label>
+
+      <div className="field">
+        <label htmlFor="pin-description">Mô tả</label>
         <textarea
+          id="pin-description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           disabled={submitting}
         />
       </div>
-      <div>
-        <label>Anh</label>
+
+      <div className="field">
+        <label htmlFor="pin-photo">Ảnh</label>
         <input
+          id="pin-photo"
           type="file"
           accept="image/png,image/jpeg,image/webp,image/gif"
           onChange={(e) => setPhoto(e.target.files[0])}
           disabled={submitting}
         />
       </div>
-      <button type="submit" disabled={submitting}>
-        {submitting ? "Dang luu..." : "Luu pin"}
-      </button>
-      <button type="button" onClick={onCancel} disabled={submitting}>
-        Huy
-      </button>
+
+      <div className="form-actions">
+        <button type="submit" className="btn btn-primary" disabled={submitting}>
+          {submitting ? "Đang lưu..." : "Lưu pin"}
+        </button>
+        <button type="button" className="btn btn-secondary" onClick={onCancel} disabled={submitting}>
+          Hủy
+        </button>
+      </div>
     </form>
   );
 }
