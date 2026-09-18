@@ -23,7 +23,9 @@ Chạy khi push hoặc mở PR vào nhánh `main` — đúng khái niệm **Cont
 
 ## 5.2. Tạo repo GitHub và đẩy code lên
 
-Trong thư mục `pinslocal/`, chạy lần lượt:
+### Bước 1 — Tạo commit đầu tiên trên máy
+
+Mở terminal (Git Bash) trong thư mục `pinslocal/`, chạy lần lượt từng lệnh:
 
 ```
 git init
@@ -31,7 +33,20 @@ git add .
 git commit -m "Khoi tao du an PinsLocal (Phase 1 MVP)"
 ```
 
-Sau đó vào https://github.com/new tạo 1 repository mới tên `pinslocal` (Public hoặc Private đều được), **không** tick "Add README" (vì mình đã có sẵn), rồi copy 2 dòng lệnh GitHub hiển thị (dạng dưới, thay `<username>` bằng tên GitHub của bạn):
+`git init` chỉ chạy **1 lần duy nhất** cho cả đời dự án (báo lỗi "Reinitialized existing Git repository" nếu chạy lại — không sao, vô hại).
+
+### Bước 2 — Tạo repository rỗng trên GitHub (thao tác trên trình duyệt)
+
+1. Đăng nhập https://github.com, vào thẳng **https://github.com/new**.
+2. Ô **Repository name**: gõ `pinslocal`.
+3. Ô **Description** (tuỳ chọn): có thể bỏ trống hoặc gõ mô tả ngắn.
+4. Mục chọn **Public** / **Private**: chọn **Public** nếu muốn giảng viên xem được mà không cần đăng nhập; **Private** nếu muốn giữ riêng tư (giảng viên phải được bạn mời qua Settings → Collaborators mới xem được).
+5. Mục **"Initialize this repository with:"** — **để trống tất cả** (không tick "Add a README file", không chọn ".gitignore template", không chọn "License") — vì máy bạn đã có sẵn các file này, tick vào sẽ gây xung đột lúc push.
+6. Bấm nút xanh **Create repository** ở cuối trang.
+
+### Bước 3 — Nối máy với repo vừa tạo và đẩy code lên
+
+Trang GitHub sau khi tạo xong sẽ hiện sẵn các dòng lệnh dưới mục **"…or push an existing repository from the command line"** — chạy đúng 3 dòng đó (thay `<username>` bằng tên tài khoản GitHub thật của bạn):
 
 ```
 git remote add origin https://github.com/<username>/pinslocal.git
@@ -39,15 +54,36 @@ git branch -M main
 git push -u origin main
 ```
 
+**Nếu đây là lần đầu `git push` trên máy này**, sẽ có 1 trong 2 tình huống:
+- 1 cửa sổ trình duyệt tự bật lên trang đăng nhập GitHub (Git Credential Manager) → đăng nhập bình thường → thấy dòng "Success, you may return to your original application" → quay lại terminal, lệnh `push` tự tiếp tục chạy xong.
+- Hoặc terminal hỏi thẳng **Username** / **Password** — gõ username GitHub, còn ô Password **không dùng mật khẩu đăng nhập thường** mà phải dùng **Personal Access Token** (tạo tại github.com → bấm avatar góc phải trên → **Settings** → cuộn xuống cuối menu trái → **Developer settings** → **Personal access tokens** → **Tokens (classic)** → **Generate new token**, tick quyền `repo` → **Generate token** → copy chuỗi ký tự hiện ra, dán vào ô Password).
+
+Push thành công sẽ in ra dạng:
+
+```
+To https://github.com/<username>/pinslocal.git
+ * [new branch]      main -> main
+```
+
+Refresh lại trang GitHub — toàn bộ file/thư mục sẽ hiện đầy đủ.
+
 ## 5.3. Xem CI chạy
 
-Vào tab **Actions** trên trang GitHub của repo → thấy workflow "CI" đang chạy (hoặc đã chạy xong) → click vào để xem log từng bước, đúng job/step đã mô tả ở mục 5.1.
+1. Trên trang repo GitHub, nhìn thanh menu ngang ngay dưới tên repo: **Code | Issues | Pull requests | Actions | Projects | ...** → bấm **Actions**.
+2. Danh sách các lần chạy hiện theo thứ tự mới nhất trên cùng, mỗi dòng có 1 icon tròn bên trái:
+   - 🟡 vòng tròn vàng đang xoay = đang chạy
+   - ✅ dấu tick xanh trong vòng tròn = chạy xong, pass
+   - ❌ dấu X đỏ = chạy xong, có bước fail
+3. Bấm vào dòng chạy mới nhất (tên dòng lấy theo nội dung commit message) → sang trang chi tiết, bên trái là danh sách job (`backend-test`, `build-and-push`) mỗi job cũng có icon trạng thái riêng.
+4. Bấm vào tên 1 job → bên phải hiện danh sách từng **step** (bước) dạng có thể thu gọn/mở rộng → bấm vào tên step (vd "Run npm test") để xem log chi tiết dòng lệnh đã chạy và kết quả in ra.
 
 Nếu job `backend-test` báo đỏ (fail) → đọc log để biết dòng test nào fail, đây chính là mục đích của CI: **bắt lỗi trước khi code lỗi lọt vào nhánh chính**.
 
 ## 5.4. Kiểm tra image đã build
 
-Vào trang GitHub profile → tab **Packages** → sẽ thấy 2 package `pinslocal/backend` và `pinslocal/frontend` (image Docker vừa được CI build & đẩy lên).
+1. Bấm vào **avatar tài khoản** ở góc trên bên phải bất kỳ trang GitHub nào → không chọn Settings mà chọn **Your profile**.
+2. Trên trang profile, thanh menu ngang có: **Overview | Repositories | Projects | Packages | Stars** → bấm **Packages**.
+3. Thấy 2 dòng `pinslocal/backend` và `pinslocal/frontend` — bấm vào 1 dòng để xem chi tiết: danh sách **version** (tag `latest`), và mục **Package settings** (bên phải, hình bánh răng ⚙) nếu muốn đổi Public/Private cho riêng package đó.
 
 ## 5.5. Vì sao bước này quan trọng cho việc nộp bài sau này
 

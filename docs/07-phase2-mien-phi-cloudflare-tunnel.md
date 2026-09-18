@@ -37,6 +37,19 @@ Internet --(Cloudflare Tunnel, mien phi)--> may ban: port 80 (Nginx proxy) --> f
 
    Log in ra 1 link dạng `https://<vai-tu-ngau-nhien>.trycloudflare.com` — **đây chính là "link online" để nộp bài**.
 
+### Cách thao tác với cửa sổ terminal đang chạy tunnel (quan trọng, hay bị nhầm)
+
+Lệnh ở bước 5 **chạy mãi không tự dừng** (không có dấu nhắc lệnh `$` quay lại) — đó là bình thường, nghĩa là tunnel đang sống. Vài lưu ý thao tác:
+
+- **Copy link ra khỏi log**: dùng chuột bôi đen đúng đoạn chữ `https://...trycloudflare.com` trong cửa sổ terminal → bấm chuột phải (Git Bash trong VSCode: bôi đen rồi bấm `Ctrl+Shift+C`, hoặc chuột phải chọn Copy) để copy, dán (`Ctrl+Shift+V` hoặc chuột phải → Paste) vào trình duyệt/nơi cần gửi.
+- **Muốn vẫn gõ lệnh khác trong lúc tunnel đang chạy**: đừng bấm `Ctrl+C` ở cửa sổ này (sẽ tắt tunnel ngay) — thay vào đó mở **thêm 1 terminal mới**: bấm icon dấu **`+`** ở góc phải panel Terminal trong VSCode (cạnh dropdown chọn shell) → 1 tab terminal mới mở ra, tab cũ (đang chạy tunnel) vẫn chạy song song bên dưới danh sách tab. Chuyển qua lại giữa các tab bằng cách bấm vào tên tab ở thanh ngang phía trên panel Terminal.
+- **Muốn dừng hẳn tunnel**: quay lại đúng tab đang chạy `cloudflared.exe`, bấm vào trong vùng đó rồi bấm `Ctrl+C`.
+- **Kiểm tra link còn sống hay không** (mở tab terminal khác, không phải tab đang chạy tunnel):
+  ```
+  curl -s -o /dev/null -w "%{http_code}\n" https://<link-cua-ban>.trycloudflare.com/
+  ```
+  Ra `200` là còn sống; không ra gì hoặc lỗi timeout nghĩa là tunnel đã tắt (do đóng terminal, tắt máy, hoặc mất mạng) — chạy lại bước 5 để lấy link mới.
+
 Đã kiểm tra thật: mở link → frontend load được (200), gọi `/api/pins` trả JSON đúng, tạo pin kèm ảnh qua `/api/pins` thành công, ảnh xem được qua `/photos/...` — toàn bộ hoạt động y hệt lúc test qua `localhost` ở Phase 1, chỉ khác là giờ ai cũng mở được, không riêng máy bạn.
 
 ## Lưu ý quan trọng khi dùng và khi nộp bài

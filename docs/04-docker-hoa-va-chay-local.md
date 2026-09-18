@@ -54,8 +54,13 @@ curl -X POST http://localhost:4000/pins -F "title=Ho Guom" -F "description=Trung
 
 Mở trình duyệt: **http://localhost:3000**
 
-- Click vào bản đồ để chọn vị trí → điền form bên phải → **Lưu pin**.
-- Pin xuất hiện trên bản đồ, click vào marker để xem chi tiết/xóa.
+1. Trang hiện bản đồ Hà Nội bên trái, form "Thêm pin mới" bên phải (đang hiện chữ "Nhấp chuột vào bản đồ để chọn vị trí ghim pin mới" vì chưa chọn vị trí nào).
+2. Phóng to/thu nhỏ bản đồ: cuộn chuột (scroll) trên bản đồ, hoặc bấm 2 nút **+ / -** ở góc trên-trái bản đồ. Kéo giữ chuột trái để di chuyển bản đồ sang vùng khác.
+3. Bấm chuột trái vào đúng 1 điểm trên bản đồ (nơi muốn ghim) → 1 marker tạm thời hiện lên đúng điểm đó, đồng thời form bên phải đổi sang hiện toạ độ + các ô nhập liệu.
+4. Điền ô **Tên địa điểm** (bắt buộc), ô **Mô tả** (tuỳ chọn).
+5. Ô **Ảnh**: bấm **Choose File** (hoặc "Browse") → cửa sổ duyệt file Windows hiện ra → chọn 1 file ảnh (jpg/png) trên máy → bấm **Open**.
+6. Bấm nút **Luu pin** (màu mặc định của trình duyệt, nằm dưới form) → pin thật xuất hiện trên bản đồ đúng vị trí đã chọn, form reset về trống.
+7. Bấm vào marker vừa tạo trên bản đồ → 1 popup nhỏ hiện lên: tên, mô tả, ảnh (nếu có), và nút **Xoa** → bấm **Xoa** để xoá pin đó (bản đồ tự cập nhật lại ngay).
 
 > Lưu ý: mình (Claude) không thể tự "nhìn" giao diện trong trình duyệt thật — đã kiểm tra bằng cách gọi thử toàn bộ API và xác nhận frontend trả về đúng HTML/JS (build không lỗi), nhưng **bạn nên tự mở trình duyệt kiểm tra trực quan** (kéo thả, xem bản đồ hiển thị đúng không, ảnh có hiện không) trước khi coi là hoàn thành.
 
@@ -65,10 +70,20 @@ Mở trình duyệt: **http://localhost:3000**
 docker compose -f docker-compose.yml -f docker-compose.monitoring.yml up -d
 ```
 
-- Prometheus: http://localhost:9090 (mục Status → Targets phải thấy `pinslocal-backend` và `node-exporter` ở trạng thái "UP")
-- Grafana: http://localhost:3001 (đăng nhập `admin`/`admin`) → Add data source → Prometheus → URL `http://prometheus:9090` → Save & Test → Import dashboard theo ID có sẵn trên grafana.com (đúng thao tác đã học ở slide Grafana/Prometheus).
+**Prometheus** — mở http://localhost:9090:
+1. Thanh menu trên cùng → **Status** → chọn **Targets** trong menu sổ xuống.
+2. Phải thấy 2 dòng `pinslocal-backend` và `node-exporter`, cột **State** hiện chữ **UP** màu xanh.
 
-Đã kiểm tra: cả 2 target đều "UP", Grafana healthcheck trả `{"database":"ok"}`.
+**Grafana** — mở http://localhost:3001:
+1. Màn hình đăng nhập: ô **Email or username** gõ `admin`, ô **Password** gõ `admin` → bấm **Log in**.
+2. Có thể hiện màn hình yêu cầu đổi mật khẩu mới → bấm **Skip** (góc dưới, chữ nhỏ) nếu chỉ dùng để học/demo local.
+3. Menu bên trái (icon) → bấm **Connections** → **Data sources** → bấm nút **Add new data source** (góc trên phải, màu xanh).
+4. Trong danh sách loại data source, gõ tìm hoặc bấm chọn **Prometheus**.
+5. Ở ô **Prometheus server URL** (mục "Connection"), gõ: `http://prometheus:9090` (tên `prometheus` là tên service trong Docker Compose, không phải `localhost` — vì Grafana gọi từ **trong** mạng Docker, không phải từ trình duyệt của bạn).
+6. Cuộn xuống cuối trang, bấm nút xanh **Save & test** — phải hiện thông báo xanh "Successfully queried the Prometheus API."
+7. Muốn xem biểu đồ có sẵn: menu trái → **Dashboards** → góc phải bấm **New** → **Import** → ô "Find and import dashboards for common applications at grafana.com/dashboards" điền 1 mã ID dashboard có sẵn (ví dụ `1860` cho Node Exporter Full) → bấm **Load** → ở dropdown "Prometheus" chọn đúng data source vừa tạo ở bước 3-6 → bấm **Import**.
+
+Đã kiểm tra: cả 2 target Prometheus đều "UP", Grafana healthcheck (`/api/health`) trả `{"database":"ok"}` — riêng phần click chi tiết trong Grafana UI ở trên mô tả theo giao diện chuẩn Grafana bản mới (đã cài ở dự án này là bản 13.2.2); nếu giao diện hơi khác 1 chút do cập nhật phiên bản, tìm đúng các cụm từ in đậm ở trên (chúng là tên cố định của tính năng, ít khi đổi).
 
 ## 4.7. Dừng hệ thống
 
