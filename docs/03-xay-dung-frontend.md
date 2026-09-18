@@ -1,9 +1,12 @@
 # Bài 3 — Frontend (React + Vite + Leaflet)
 
-Thư mục: [`frontend/`](../frontend/).
+> Bài này giải thích **code giao diện**, dùng thuật ngữ lập trình — chưa quen thì đọc phần "Lập trình cơ bản" trong [00b-bang-thuat-ngu.md](00b-bang-thuat-ngu.md) trước.
+
+Thư mục: [`frontend/`](../frontend/) (nơi chứa toàn bộ code phần giao diện — thứ người dùng thật sự nhìn thấy và bấm vào trong trình duyệt).
 
 ## 3.1. Vì sao chọn Vite + React + Leaflet?
 
+- **React**: thư viện JavaScript để viết giao diện theo kiểu "chia nhỏ thành từng khối lắp ráp" gọi là **component** (ví dụ `PinMap`, `PinForm` — mỗi cái là 1 khối giao diện riêng, có thể tái sử dụng), thay vì viết 1 trang HTML dài lê thê.
 - **Vite**: công cụ build frontend hiện đại, khởi động cực nhanh, output ra file HTML/CSS/JS tĩnh — dễ deploy sau Nginx (hoặc S3+CloudFront ở Phase 3).
 - **Leaflet + OpenStreetMap**: thư viện bản đồ mã nguồn mở, **miễn phí, không cần API key** — phù hợp giai đoạn học, tránh phải đăng ký thêm tài khoản Google Maps.
 

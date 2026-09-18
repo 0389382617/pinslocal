@@ -1,10 +1,12 @@
 # Bài 4 — Chạy toàn bộ hệ thống bằng Docker Compose
 
-Thư mục: [`infra/`](../infra/).
+> Từ khó (container, image, port, healthcheck...) tra ở [00b-bang-thuat-ngu.md](00b-bang-thuat-ngu.md).
+
+Thư mục: [`infra/`](../infra/) (nơi chứa file mô tả cách chạy/triển khai toàn bộ hệ thống — khác `backend/`, `frontend/` là nơi chứa code app).
 
 ## 4.1. Đọc hiểu `docker-compose.yml`
 
-Mở [`infra/docker-compose.yml`](../infra/docker-compose.yml). 6 service:
+Mở [`infra/docker-compose.yml`](../infra/docker-compose.yml). File này khai báo 6 **service** — mỗi service là 1 chương trình chạy trong 1 container riêng, tất cả được Docker Compose khởi động và nối mạng với nhau cùng lúc:
 
 | Service | Image | Vai trò |
 |---|---|---|

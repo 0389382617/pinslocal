@@ -4,7 +4,7 @@ Tài liệu này gộp **toàn bộ thao tác thực tế** đã làm trong dự
 
 Các file `docs/01`–`08` giải thích **vì sao** code viết như vậy (kiến trúc, ý nghĩa từng dòng). File này chỉ tập trung **thao tác** — làm gì, gõ gì, bấm đâu. Nên đọc song song, hoặc đọc file này trước để hình dung toàn cảnh, quay lại 01-08 khi cần hiểu sâu.
 
-> Quy ước: các lệnh dưới đây chạy trong **Git Bash** (cài kèm khi cài Git for Windows — nếu dùng terminal PowerShell mặc định của VSCode, bấm mũi tên nhỏ cạnh dấu `+` ở góc phải panel Terminal → chọn "Git Bash"). Đường dẫn kiểu `/e/projects/pinslocal` = `E:\projects\pinslocal` viết theo kiểu Git Bash.
+> Quy ước: các lệnh dưới đây chạy trong **Git Bash** (cài kèm khi cài Git for Windows — nếu dùng terminal PowerShell mặc định của VSCode, bấm mũi tên nhỏ cạnh dấu `+` ở góc phải panel Terminal → chọn "Git Bash"). Đường dẫn kiểu `/e/projects/pinslocal` = `E:\projects\pinslocal` viết theo kiểu Git Bash. Gặp từ khó (terminal là gì, container là gì...) tra ở [00b-bang-thuat-ngu.md](00b-bang-thuat-ngu.md) — file này giả định bạn đã đọc qua [docs/01](01-cai-dat-moi-truong.md) nên không giải thích lại khái niệm cơ bản.
 
 ---
 

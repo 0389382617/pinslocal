@@ -1,5 +1,7 @@
 # Bài 1 — Cài đặt & kiểm tra môi trường (chi tiết từng cú click)
 
+> Từ khó (VPS, terminal, Docker...) tra ở [00b-bang-thuat-ngu.md](00b-bang-thuat-ngu.md).
+
 ## Cần cài gì?
 
 | Công cụ | Bắt buộc? | Vì sao |
@@ -17,7 +19,7 @@ Máy đang dùng cho dự án này **đã có sẵn Docker + Git** (đã kiểm 
 2. Bấm nút **Download for Windows** (nút xanh, to, giữa trang).
 3. File tải về tên dạng `Docker Desktop Installer.exe` (nằm trong thư mục `Downloads`) — bấm đúp để chạy.
 4. Windows có thể hiện hộp thoại **"User Account Control"** hỏi "Do you want to allow this app to make changes?" → bấm **Yes**.
-5. Cửa sổ cài đặt Docker hiện ra với 2 ô tick: **"Use WSL 2 instead of Hyper-V"** (nên để tick sẵn, đây là lựa chọn khuyến nghị) và **"Add shortcut to desktop"** (tùy chọn) → bấm **Ok** để bắt đầu cài.
+5. Cửa sổ cài đặt Docker hiện ra với 2 ô tick: **"Use WSL 2 instead of Hyper-V"** (WSL2 là 1 lớp "máy ảo Linux nhẹ" tích hợp sẵn trong Windows — Docker cần chạy trên nền Linux nên dùng lớp này; cứ để tick sẵn, đây là lựa chọn khuyến nghị, không cần hiểu sâu hơn) và **"Add shortcut to desktop"** (tùy chọn) → bấm **Ok** để bắt đầu cài.
 6. Đợi thanh tiến trình chạy xong (khoảng 1-3 phút) → bấm **Close and restart** (Docker sẽ yêu cầu khởi động lại máy để bật tính năng ảo hóa WSL2).
 7. Sau khi máy khởi động lại, Docker Desktop tự mở (hoặc mở tay qua **Start Menu → gõ "Docker Desktop" → Enter**).
 8. Lần đầu mở sẽ hiện màn hình "Docker Subscription Service Agreement" → tick **"I accept the terms"** → bấm **Accept**.

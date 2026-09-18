@@ -1,5 +1,7 @@
 # Bài 7 — Phase 2 (miễn phí): Đưa app ra internet bằng Cloudflare Tunnel
 
+> Từ khó tra ở [00b-bang-thuat-ngu.md](00b-bang-thuat-ngu.md). **Cloudflare Tunnel** là 1 dịch vụ miễn phí tạo ra 1 "đường hầm" nối từ internet công cộng thẳng vào 1 chương trình đang chạy trên máy bạn — không cần bạn tự cấu hình router/mở cổng mạng nhà mình.
+
 Không cần VPS, không cần thẻ thanh toán, không cần tài khoản Cloudflare. Đánh đổi: **máy bạn + Docker phải đang chạy thì link mới sống** — khác với VPS thật (luôn online 24/7 dù bạn tắt máy). Phù hợp giai đoạn học/demo; khi cần link ổn định lâu dài, xem [Bài 08](08-phase2-vps-tra-phi-terraform.md) (có phí).
 
 ## Ý tưởng

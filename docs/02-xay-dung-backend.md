@@ -1,6 +1,8 @@
 # Bài 2 — Backend (Node.js + Express + DynamoDB + S3)
 
-Thư mục: [`backend/`](../backend/). Đây là API phục vụ frontend: tạo/xem/xóa "pin" (ghim địa điểm kèm ảnh).
+> Bài này giải thích **code**, có dùng thuật ngữ lập trình (function, async, JSON...) — nếu chưa quen lập trình, đọc phần "Lập trình cơ bản" trong [00b-bang-thuat-ngu.md](00b-bang-thuat-ngu.md) trước. Từ khó khác tra cũng ở đó.
+
+Thư mục: [`backend/`](../backend/) (nơi chứa toàn bộ code phần backend). Backend ở đây là 1 chương trình **API** (xem glossary) phục vụ frontend: tạo/xem/xóa "pin" (ghim địa điểm kèm ảnh).
 
 ## 2.1. `package.json` — khai báo dependency
 

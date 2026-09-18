@@ -1,6 +1,8 @@
 # Bài 5 — CI với GitHub Actions
 
-Thư mục: [`.github/workflows/ci.yml`](../.github/workflows/ci.yml).
+> Từ khó (CI, workflow, job, token, SHA...) tra ở [00b-bang-thuat-ngu.md](00b-bang-thuat-ngu.md). **GitHub Actions** là tính năng của GitHub tự động chạy các lệnh (test, build...) mỗi khi có code mới được đẩy lên — không cần bạn tự tay chạy lại mỗi lần.
+
+Thư mục: [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) — file mô tả "khi nào tự chạy" và "chạy gì" (gọi là 1 **workflow**).
 
 ## 5.1. Đọc hiểu workflow
 

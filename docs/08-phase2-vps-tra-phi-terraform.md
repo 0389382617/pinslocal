@@ -1,6 +1,6 @@
 # Bài 8 — Phase 2 (tùy chọn, trả phí): Lên VPS thật bằng Terraform + Ansible
 
-> Đây là phương án **thay thế** cho [Bài 07](07-phase2-mien-phi-cloudflare-tunnel.md) — dùng khi bạn sẵn sàng trả vài USD/tháng để có 1 VPS thật (ổn định 24/7, không phụ thuộc máy cá nhân phải bật). Nếu đang ưu tiên $0, cứ dùng Bài 07, quay lại đây sau.
+> Đây là phương án **thay thế** cho [Bài 07](07-phase2-mien-phi-cloudflare-tunnel.md) — dùng khi bạn sẵn sàng trả vài USD/tháng để có 1 VPS thật (ổn định 24/7, không phụ thuộc máy cá nhân phải bật). Nếu đang ưu tiên $0, cứ dùng Bài 07, quay lại đây sau. Từ khó (VPS, Terraform, Ansible, firewall, SSH key...) tra ở [00b-bang-thuat-ngu.md](00b-bang-thuat-ngu.md).
 
 Code đã chuẩn bị sẵn và đã kiểm tra cú pháp (`terraform validate` pass, `ansible-playbook --syntax-check` pass). Phần còn lại cần **bạn** thực hiện vì liên quan tài khoản/thanh toán thật.
 

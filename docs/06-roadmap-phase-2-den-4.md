@@ -1,6 +1,8 @@
 # Bài 6 — Roadmap Phase 2 → 4 (làm khi có VPS/AWS)
 
-Phase 1 (MVP) đã xong và chạy được local. Các phase dưới đây **chưa code** (vì cần tài khoản/tài nguyên thật bạn chưa có) — đây là bản kế hoạch chi tiết để làm dần, quay lại nhờ hướng dẫn tiếp khi bạn có từng tài nguyên.
+> Từ khó tra ở [00b-bang-thuat-ngu.md](00b-bang-thuat-ngu.md). Bài này liệt kê **việc cần làm trong tương lai** (roadmap), chưa phải hướng dẫn bấm-từng-bước — vì các bước cụ thể phụ thuộc tài khoản/tài nguyên bạn sẽ có sau này, chưa thể viết chi tiết ngay bây giờ.
+
+Phase 1 (MVP — Minimum Viable Product, nghĩa là "bản chạy được tối thiểu, đủ dùng") đã xong và chạy được local (trên máy bạn). Các phase dưới đây **chưa code** (vì cần tài khoản/tài nguyên thật bạn chưa có) — đây là bản kế hoạch chi tiết để làm dần, quay lại nhờ hướng dẫn tiếp khi bạn có từng tài nguyên.
 
 ## Phase 2 — Có link online
 
