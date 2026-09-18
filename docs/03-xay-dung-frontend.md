@@ -24,6 +24,16 @@ const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
 
 ## 3.3. `src/components/PinMap.jsx` — bản đồ
 
+### Hình ảnh bản đồ lấy từ đâu?
+
+Quan trọng cần hiểu rõ: **Leaflet không hề có sẵn dữ liệu bản đồ nào** — nó chỉ là "khung vẽ" lo việc kéo/zoom/đặt marker. Hình ảnh bản đồ thật sự đến từ **OpenStreetMap (OSM)** — dự án bản đồ miễn phí, mã nguồn mở do cộng đồng khắp thế giới đóng góp (giống Wikipedia nhưng cho bản đồ).
+
+```js
+<TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+```
+
+OSM chia bản đồ cả thế giới thành hàng triệu ô ảnh vuông nhỏ gọi là **tile** (~256×256px), dựng sẵn theo từng mức zoom. `{z}` = mức zoom, `{x}/{y}` = tọa độ ô trong lưới ở mức đó, `{s}` = chọn ngẫu nhiên 1 trong các máy chủ phụ để chia tải. Mỗi lần kéo/zoom, Leaflet tự tính cần tile nào và gọi **thẳng tới OpenStreetMap** để tải — không qua backend của mình, miễn phí, không cần đăng ký API key (khác Google Maps bắt buộc có key + tính phí khi dùng nhiều).
+
 - `MapContainer` từ `react-leaflet`, tâm bản đồ đặt ở Hà Nội (đổi `HANOI_CENTER` nếu muốn).
 - `ClickHandler` dùng hook `useMapEvents` — bắt sự kiện click vào bản đồ để lấy tọa độ `lat/lng` cho pin mới.
 - Mỗi pin hiển thị `Marker` + `Popup` (tên, mô tả, ảnh nếu có, nút Xóa).

@@ -30,6 +30,14 @@
 
 **import / require** — lệnh "lấy code từ file/thư viện khác về dùng", giống mượn sách ở thư viện.
 
+## Bản đồ (dùng ở docs/03)
+
+**OpenStreetMap (OSM)** — dự án bản đồ **miễn phí, mã nguồn mở**, do cộng đồng khắp thế giới cùng đóng góp dữ liệu (đường xá, tên địa điểm...) — giống Wikipedia nhưng cho bản đồ, khác Google Maps là do 1 công ty tự thu thập và thu phí khi dùng nhiều.
+
+**Tile (ô bản đồ)** — OpenStreetMap chia cả thế giới thành hàng triệu ô ảnh vuông nhỏ (~256×256px), dựng sẵn theo từng mức zoom — giống cắt 1 tấm bản đồ giấy khổng lồ thành nhiều mảnh ghép nhỏ, cần xem chỗ nào thì lấy đúng mảnh đó ra ghép lại, không cần tải cả tấm bản đồ 1 lúc.
+
+**Leaflet** — thư viện code để hiển thị bản đồ tương tác được (kéo/zoom/đặt marker) trong trình duyệt — **bản thân nó không có dữ liệu bản đồ**, chỉ là công cụ vẽ; dữ liệu/hình ảnh bản đồ phải lấy từ nơi khác (ở đây là OpenStreetMap).
+
 ## Web & API (dùng ở docs/02, 03, 04)
 
 **Server (máy chủ) / Client** — Server là "người phục vụ" luôn chờ sẵn để trả lời yêu cầu; Client là "người yêu cầu" (ở đây là trình duyệt/frontend). Giống nhà hàng: server là đầu bếp, client là khách gọi món.
