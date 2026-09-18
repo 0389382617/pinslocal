@@ -24,6 +24,11 @@ So với Phase 1: frontend gọi API qua đường dẫn tương đối `/api/..
 
 File liên quan: [`infra/docker-compose.prod.yml`](../infra/docker-compose.prod.yml), [`infra/nginx-proxy/nginx.conf`](../infra/nginx-proxy/nginx.conf), [`infra/terraform/`](../infra/terraform/), [`infra/ansible/`](../infra/ansible/).
 
+**Đã bổ sung sau đợt rà soát bảo mật:**
+- `infra/terraform/main.tf` có thêm `digitalocean_firewall` — chỉ mở đúng 3 cổng cần thiết (22 SSH, 80 HTTP, 443 HTTPS) ra internet. DigitalOcean **không** tự chặn cổng nào cho droplet mới như AWS Security Group mặc định deny-all — nếu thiếu bước này, droplet mở toang mọi cổng hệ điều hành đang lắng nghe ra cả internet.
+- `docker-compose.prod.yml`: service `backend` có `healthcheck` gọi `/health`, và `proxy` chỉ bắt đầu chuyển traffic sau khi `backend` báo "healthy" (`condition: service_healthy`) — tránh Nginx chuyển request tới 1 backend đã "Up" nhưng tiến trình bên trong bị treo/chưa sẵn sàng.
+- `infra/nginx-proxy/nginx.conf` giới hạn `client_max_body_size 6m` (khớp giới hạn upload ảnh 5MB của backend) và chặn hẳn đường dẫn `/api/metrics` (số liệu Prometheus nội bộ) không cho lộ ra internet công khai.
+
 ## Bước 1 — Tạo tài khoản DigitalOcean + API token
 
 1. Vào https://cloud.digitalocean.com/registrations/new, đăng ký tài khoản (thường có gói credit dùng thử cho tài khoản mới).

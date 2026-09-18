@@ -16,10 +16,12 @@ Chạy khi push hoặc mở PR vào nhánh `main` — đúng khái niệm **Cont
 
 2 job:
 
-1. **`backend-test`**: cài Node 20, `npm install`, `npm test` (chạy 5 test ở Bài 2 — dùng mock nên không cần Docker/DynamoDB/MinIO thật ngay trong CI).
-2. **`build-and-push`**: chỉ chạy khi push thật (không chạy trên PR, tránh build thừa), build Docker image cho `backend` và `frontend`, đẩy lên **GitHub Container Registry** (`ghcr.io`) — dùng `secrets.GITHUB_TOKEN` là token **tự động có sẵn** của GitHub Actions, không cần tạo tài khoản Docker Hub hay xin thêm secret nào.
+1. **`backend-test`**: cài Node 20, `npm ci`, `npm test` (chạy 5 test ở Bài 2 — dùng mock nên không cần Docker/DynamoDB/MinIO thật ngay trong CI). Dùng `npm ci` (không phải `npm install`) để cài đúng chính xác version đã khóa trong `package-lock.json`, không tự ý nâng version giữa các lần chạy CI.
+2. **`build-and-push`**: chỉ chạy khi push thật (không chạy trên PR, tránh build thừa), build Docker image cho `backend` và `frontend`, đẩy lên **GitHub Container Registry** (`ghcr.io`) — dùng `secrets.GITHUB_TOKEN` là token **tự động có sẵn** của GitHub Actions, không cần tạo tài khoản Docker Hub hay xin thêm secret nào. Mỗi image được gắn **2 tag**: `latest` (bản mới nhất) và `${{ github.sha }}` (đúng commit đã build ra nó) — nhờ tag theo SHA, sau này nếu bản `latest` mới có lỗi, có thể chỉ định lại đúng SHA cũ để rollback thay vì chịu chết vì `latest` đã bị ghi đè mất bản cũ.
 
 `needs: backend-test` — job build chỉ chạy **sau khi** test pass, không lãng phí thời gian build image nếu test đã fail.
+
+**Ghim action theo SHA thay vì tag** (`actions/checkout@11d5960a...` kèm comment `# v4`, thay vì chỉ `@v4`): tag như `v4` là con trỏ **có thể bị dịch chuyển** sang commit khác theo thời gian (do chính chủ action cập nhật, hoặc nếu tài khoản publish bị chiếm) — CI của bạn khi đó sẽ tự động chạy code khác mà không ai để ý, trong khi job `build-and-push` đang cầm `secrets.GITHUB_TOKEN` với quyền ghi vào `ghcr.io`. Ghim theo SHA cụ thể (dài 40 ký tự) đảm bảo CI luôn chạy đúng 1 phiên bản đã được kiểm chứng, không tự đổi ngầm.
 
 ## 5.2. Tạo repo GitHub và đẩy code lên
 

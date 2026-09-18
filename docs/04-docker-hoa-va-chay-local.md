@@ -17,6 +17,8 @@ Mở [`infra/docker-compose.yml`](../infra/docker-compose.yml). 6 service:
 
 Cách bấm-từng-bước để xem dữ liệu DynamoDB/S3 bằng giao diện web (đăng nhập MinIO, duyệt bucket, duyệt bảng DynamoDB...): xem [docs/02 mục 2.8](02-xay-dung-backend.md#28-kết-nối-thực-chất-là-gì--và-cách-tự-mắt-nhìn-thấy-nó).
 
+> **Bảo mật**: tất cả port ở trên (`8000`, `9000`, `9001`, `8001`, `4000`) đều publish dạng `127.0.0.1:<port>:<port>` — chỉ máy bạn (localhost) mở được, máy khác chung mạng Wi-Fi/LAN không truy cập được, kể cả `dynamodb-admin`/MinIO console vốn không có màn hình đăng nhập bảo vệ. Trước đây các port này publish ra `0.0.0.0` (mọi giao diện mạng) — ai trong cùng mạng cũng vào đọc/sửa/xóa dữ liệu được. Riêng `frontend` (`3000:80`) vẫn để mở bình thường vì đó là giao diện app cần truy cập.
+
 `environment: &backend-env ... <<: *backend-env` là **YAML anchor** — khai báo 1 lần bộ biến môi trường dùng chung cho `init` và `backend`, tránh lặp code.
 
 ## 4.2. Chạy thử
@@ -39,6 +41,12 @@ Khi build lần đầu, mình (Claude) đã gặp đúng 2 lỗi hạ tầng kin
 1. **`pull access denied for minio/minio`** — Docker Hub đã giới hạn quyền pull ảnh `minio/minio:latest` (cần đăng nhập). Cách sửa: dùng registry chính thức thay thế `quay.io/minio/minio:latest` (đã áp dụng sẵn trong compose file). Bài học: **image công khai có thể đổi chính sách phân phối theo thời gian** — luôn có phương án registry dự phòng.
 
 2. **DynamoDB-local báo lỗi `SQLiteException: unable to open database file`** — do mount volume Docker vào `-dbPath /data` bị lỗi quyền ghi trên Docker Desktop (Windows). Cách sửa: chạy DynamoDB-local ở chế độ `-inMemory` thay vì ghi file — phù hợp môi trường học tập vì không cần giữ dữ liệu qua các lần restart.
+
+3. **`ports are not available: ... bind: Only one usage of each socket address...`** — lỗi này **không phải do code dự án**, mà do 1 chương trình KHÁC trên máy đang chiếm đúng port compose cần dùng (từng gặp thật: 1 tiến trình Python không liên quan đang lắng nghe port 8000 đúng lúc dựng lại stack). Cách xác định thủ phạm trên Windows:
+   ```
+   netstat -ano | grep ":8000"
+   ```
+   Cột cuối cùng là PID (số định danh tiến trình) — tra tiếp `tasklist | grep <PID>` (hoặc mở Task Manager, tab Details, tìm đúng PID) để biết chương trình nào đang chiếm cổng, rồi tắt nó đi (hoặc tạm đổi port map trong `docker-compose.yml`, vd `"127.0.0.1:18000:8000"`, nếu không tiện tắt).
 
 ## 4.4. Kiểm thử API bằng `curl`
 
