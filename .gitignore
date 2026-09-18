@@ -13,3 +13,7 @@ infra/terraform/*.tfplan
 # Ansible - inventory that (chua IP that) va mat khau sinh ra
 infra/ansible/inventory.ini
 infra/ansible/.generated_minio_password
+
+# Cloudflare Tunnel (Phase 2 mien phi) - binary tai ve va mat khau MinIO local
+.tools/
+infra/.env

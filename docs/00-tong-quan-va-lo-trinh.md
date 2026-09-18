@@ -48,3 +48,5 @@ dynamodb-local        minio (gia lap S3)
 4. [04-docker-hoa-va-chay-local.md](04-docker-hoa-va-chay-local.md) — chạy toàn bộ bằng Docker
 5. [05-ci-voi-github-actions.md](05-ci-voi-github-actions.md) — đẩy code lên GitHub, xem CI chạy
 6. [06-roadmap-phase-2-den-4.md](06-roadmap-phase-2-den-4.md) — việc cần làm khi có VPS/AWS
+7. [07-phase2-mien-phi-cloudflare-tunnel.md](07-phase2-mien-phi-cloudflare-tunnel.md) — **đã làm**: đưa app ra internet miễn phí bằng Cloudflare Tunnel (không cần VPS/thẻ)
+8. [08-phase2-vps-tra-phi-terraform.md](08-phase2-vps-tra-phi-terraform.md) — phương án thay thế (có phí): VPS thật bằng Terraform + Ansible

@@ -1,0 +1,7 @@
+# Override CHI dung khi chay docker-compose.prod.yml ngay tren may Windows (khong phai VPS that)
+# de expose qua Cloudflare Tunnel mien phi, khong can mua VPS.
+# Ly do: DynamoDB-local ghi file SQLite bi loi quyen tren Docker Desktop/Windows (giong Phase 1),
+# nen chuyen sang -inMemory. Tren VPS Linux that, dung thang docker-compose.prod.yml (co du lieu ben vung).
+services:
+  dynamodb-local:
+    command: ["-jar", "DynamoDBLocal.jar", "-inMemory", "-sharedDb"]
