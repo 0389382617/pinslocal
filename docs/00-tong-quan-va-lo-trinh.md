@@ -40,6 +40,8 @@ dynamodb-local        minio (gia lap S3)
 (port 8000)           (port 9000/9001)
 ```
 
+> Muốn xem gộp **toàn bộ thao tác** (từng lệnh, từng cú click) thành 1 quy trình liền mạch từ số 0 → có link online? Đọc thẳng [09-runbook-toan-tap.md](09-runbook-toan-tap.md).
+
 ## Đọc tiếp theo thứ tự
 
 1. [01-cai-dat-moi-truong.md](01-cai-dat-moi-truong.md) — kiểm tra công cụ đã cài

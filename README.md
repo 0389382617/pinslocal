@@ -4,7 +4,7 @@
 
 Đây là **Phase 1 (MVP)**: chạy hoàn toàn trên máy bằng Docker, không cần tài khoản AWS/VPS/domain. Dùng đúng API sẽ dùng ở bản triển khai thật (DynamoDB, S3) nhưng trỏ vào bản giả lập chạy local (`dynamodb-local`, `minio`) — khi có tài khoản AWS thật chỉ cần đổi biến môi trường, không sửa code.
 
-Đọc theo thứ tự trong [`docs/`](docs/00-tong-quan-va-lo-trinh.md) để vừa học vừa làm theo từng bước.
+Đọc theo thứ tự trong [`docs/`](docs/00-tong-quan-va-lo-trinh.md) để vừa học vừa làm theo từng bước, hoặc đọc thẳng **[docs/09-runbook-toan-tap.md](docs/09-runbook-toan-tap.md)** để có quy trình đầy đủ từ số 0 đến khi có link online, chi tiết từng lệnh/từng nút bấm.
 
 ## Chạy nhanh
 
